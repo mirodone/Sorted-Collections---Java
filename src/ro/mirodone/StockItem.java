@@ -5,6 +5,9 @@ public class StockItem implements Comparable<StockItem> {
     private final String name;
     private double price;
     private int qtyStock = 0;
+    private int reserverd = 0;
+
+
 
     public StockItem(String name, double price) {
         this.name = name;
@@ -27,9 +30,14 @@ public class StockItem implements Comparable<StockItem> {
     }
 
     //getQtyStock getter changed to  quantityInStock to make more sense in what it does
-    public int quantityInStock() {
-        return qtyStock;
+/*    public int quantityInStock() {
+        return qtyStock - reserverd;
+    }*/
+
+    public int availableQuantity() {
+        return qtyStock - reserverd;
     }
+
 
     public void setPrice(double price) {
         if(price > 0.0){
@@ -44,6 +52,34 @@ public class StockItem implements Comparable<StockItem> {
             this.qtyStock = newQty;
         }
     }
+
+    public int reserveStock (int qty) {
+        //used the method, not the field. qtyStock
+        if(qty  <= availableQuantity()){
+            reserverd += qty;
+            return qty;
+        }
+        return 0;
+    }
+
+    public int unreserveStock (int qty) {
+        if (qty <= reserverd){
+            reserverd -= qty;
+            return qty;
+        }
+        return 0;
+    }
+
+
+    public int finaliseStock (int qty){
+        if(qty <= reserverd){
+            qtyStock -= qty;
+            reserverd -= qty;
+            return qty;
+        }
+        return 0;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -67,7 +103,7 @@ public class StockItem implements Comparable<StockItem> {
 
     @Override
     public int compareTo(StockItem o) {
-        System.out.println("Entering StockItem.compareTo");
+     //   System.out.println("Entering StockItem.compareTo");
         if(this == o) {
             return 0;
         }
@@ -82,6 +118,6 @@ public class StockItem implements Comparable<StockItem> {
 
     @Override
     public String toString() {
-        return this.name + " : price " + this.price;
+        return this.name + " : price " + this.price + ". Reserved: " + this.reserverd;
     }
 }

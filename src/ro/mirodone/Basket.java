@@ -25,6 +25,27 @@ public class Basket {
         return 0;
     }
 
+    public int removeFromBasket ( StockItem item, int qty) {
+        if((item != null) && (qty >0)) {
+            //check if we already have the item in the basket
+            int inBasket = list.getOrDefault(item, 0);
+            int newQuantity = inBasket -qty;
+
+            if(newQuantity >0) {
+                list.put(item, newQuantity);
+                return qty;
+            }else if(newQuantity == 0) {
+                list.remove(item);
+                return qty;
+            }
+        }return 0;
+    }
+
+    public void clearBasket () {
+        this.list.clear();
+    }
+
+
     public Map<StockItem, Integer> Items() {
         return Collections.unmodifiableMap(list);
     }
